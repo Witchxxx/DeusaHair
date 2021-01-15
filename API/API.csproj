@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="deusa.db" />
+    <None Remove="deusa.db-shm" />
+    <None Remove="deusa.db-wal" />
+  </ItemGroup>
+
+  <ItemGroup>
  
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
