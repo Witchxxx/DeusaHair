@@ -34,6 +34,13 @@ namespace API
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddApplicationServices(); // created an extension class to reduce crowding in start up.
             services.AddSwaggerDocumentation();
+            services.AddCors(opt =>
+            { 
+                opt.AddPolicy("CorsPolicy", policy =>
+                 {
+                     policy.AllowAnyHeader().AllowAnyHeader().WithOrigins("https://localhost:4200");
+                 });
+            }); // so our angular app is Allowed to send requests to API since it is forbidden by default.
 
         }
 
@@ -50,6 +57,8 @@ namespace API
             app.UseRouting();
 
             app.UseStaticFiles(); //so we can serve static images like our products. Always has to be here as order is important.
+
+            app.UseCors("CorsPolicy"); // middle for enbling cors.
 
             app.UseAuthorization();
 

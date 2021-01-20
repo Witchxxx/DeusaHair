@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Data
@@ -25,7 +26,11 @@ namespace Infrastructure.Data
             return await _context.Products
                 .Include(p => p.ProductType)
                 .Include(p => p.ProductBrand)
-                .FirstOrDefaultAsync(p => p.Id == id);
+              //  .Skip(1) for pagination
+               // .Take(1) for pagination
+               
+                .FirstOrDefaultAsync(p => p.Id == id)
+                ;
         }
 
         public async Task<IReadOnlyList<Product>> GetProductsAsync()
