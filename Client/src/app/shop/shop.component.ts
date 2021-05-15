@@ -3,7 +3,7 @@ import { IBrand } from '../shared/models/brand';
 import { IProduct } from '../shared/models/product';
 import { IType } from '../shared/models/productType';
 import { ShopService } from './shop.service';
-
+import { ShopParams} from '../shared/models/shopParams';
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
@@ -14,9 +14,9 @@ export class ShopComponent implements OnInit {
   products: Array<IProduct> = [];
   brands: IBrand[] = [];
   types: IType[] = [];
-  brandIdSelected = 0;
-  typeIdSelected = 0;
-  sortSelected = 'name';
+  shopParams = new ShopParams();
+  totalCount: number = 0;
+
   sortOptions = [
     { name: 'Alpabetical', value: 'name' },
     { name: 'Price: Low to High', value: 'priceAsc'},
@@ -36,13 +36,16 @@ export class ShopComponent implements OnInit {
 
   getProducts(): void{
 
-    this.shopService.getProducts(this.brandIdSelected, this.typeIdSelected, this.sortSelected).subscribe(response => {
+    this.shopService.getProducts(this.shopParams).subscribe(response => {
 
 
       if (response?.data )
       {
 
          this.products = response.data;
+         this.shopParams.pageNumber = response.pageIndex;
+         this.shopParams.pageSize = response.pageSize; 
+         this.totalCount = response.count;
          console.log('pagination: ' + response.data);
       }
 
@@ -71,18 +74,23 @@ export class ShopComponent implements OnInit {
   }
 
   onBrandSelected(brandId: number){
-    this.brandIdSelected = brandId;
+    this.shopParams.brandId = brandId;
     this.getProducts();
 
   }
 
   onTypeSelected(typeId: number){
-    this.typeIdSelected = typeId;
+    this.shopParams.typeId = typeId;
     this.getProducts();
   }
 
   onSortSelected(e: Event){
-    this.sortSelected = (e.target as HTMLSelectElement).value.toString();
+    this.shopParams.sort = (e.target as HTMLSelectElement).value.toString();
+    this.getProducts();
+  }
+
+  onPageChanged(event: any){
+    this.shopParams.pageNumber = event.page;
     this.getProducts();
   }
   
