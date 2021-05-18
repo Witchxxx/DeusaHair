@@ -25,7 +25,5 @@ namespace Core.Specifications
             set => _search = value.ToLower();
         }
 
-
-
-    }
+   }
 }
